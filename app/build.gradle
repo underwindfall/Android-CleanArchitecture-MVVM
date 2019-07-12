@@ -1,0 +1,73 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion build_versions.target_sdk
+    defaultConfig {
+        applicationId "com.qifan.leboncoin"
+        minSdkVersion build_versions.min_sdk
+        targetSdkVersion build_versions.target_sdk
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+
+    implementation deps.support.core
+    implementation deps.support.lifecycle
+    implementation deps.support.app_compat
+    implementation deps.support.recyclerview
+    implementation deps.support.annotation
+    implementation deps.support.constraintlayout
+
+    implementation deps.lifecycle.viewmodel_ktx
+
+    // Rx
+    implementation deps.rxjava2.android
+    implementation deps.rxjava2.kotlin
+
+    implementation deps.http.retrofit.rxjava2
+    implementation deps.http.retrofit.core
+    implementation deps.http.retrofit.gson
+    implementation deps.http.logging
+
+    //Kotlin
+    implementation deps.kotlin.stdlib
+//    implementation deps.kotlin.reflec
+
+    //DI
+    implementation deps.koin.core
+    implementation deps.koin.android
+    implementation deps.koin.scope
+    implementation deps.koin.viewmodel
+
+    // Multidex
+    implementation deps.multidex
+
+    // Rx
+    implementation deps.rxjava2.android
+    implementation deps.rxjava2.kotlin
+
+    implementation deps.rx.binding.platform
+    implementation deps.rx.binding.core
+    implementation deps.rx.binding.appcompat
+
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+}
