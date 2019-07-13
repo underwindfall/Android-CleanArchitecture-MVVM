@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
 android {
     compileSdkVersion build_versions.target_sdk
     defaultConfig {
@@ -26,7 +27,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-
 
     implementation deps.support.core
     implementation deps.support.lifecycle
@@ -66,6 +66,13 @@ dependencies {
     implementation deps.rx.binding.platform
     implementation deps.rx.binding.core
     implementation deps.rx.binding.appcompat
+
+    //db
+    implementation deps.room.runtime
+    kapt deps.room.compiler
+    implementation deps.room.ktx
+    implementation deps.room.rxjava
+
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
