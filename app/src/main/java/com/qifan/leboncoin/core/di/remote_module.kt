@@ -2,6 +2,9 @@ package com.qifan.leboncoin.core.di
 
 import com.google.gson.GsonBuilder
 import com.qifan.leboncoin.BuildConfig
+import com.qifan.leboncoin.core.BASE_URL
+import com.qifan.leboncoin.core.OK_HTTP_CACHE_SIZE
+import com.qifan.leboncoin.data.remote.LeBonCoinService
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -14,11 +17,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 /**
  * Created by Qifan on 2019-07-13.
  */
-private const val BASE_URL = "http://jsonplaceholder.typicode.com/"
 
-val remoteModule = module {
+val networkModule = module {
 
-    single { Cache(androidApplication().cacheDir, 10L * 1024 * 1024) }
+    single { Cache(androidApplication().cacheDir, OK_HTTP_CACHE_SIZE) }
 
     single { GsonBuilder().create() }
 
@@ -26,11 +28,13 @@ val remoteModule = module {
         OkHttpClient.Builder().apply {
             cache(get())
             addInterceptor(HttpLoggingInterceptor().apply {
-                if (BuildConfig.DEBUG) {
-                    level = HttpLoggingInterceptor.Level.BODY
+                level = if (BuildConfig.DEBUG) {
+                    HttpLoggingInterceptor.Level.BODY
+                } else {
+                    HttpLoggingInterceptor.Level.NONE
                 }
             })
-        }
+        }.build()
     }
 
     single<Retrofit> {
@@ -40,5 +44,9 @@ val remoteModule = module {
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .client(get())
             .build()
+    }
+
+    single<LeBonCoinService> {
+        get<Retrofit>().create(LeBonCoinService::class.java)
     }
 }
