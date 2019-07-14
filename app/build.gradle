@@ -29,6 +29,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation deps.support.core
+    implementation deps.support.design
     implementation deps.support.lifecycle
     implementation deps.support.app_compat
     implementation deps.support.recyclerview
@@ -48,7 +49,10 @@ dependencies {
 
     //Kotlin
     implementation deps.kotlin.stdlib
-//    implementation deps.kotlin.reflec
+
+    //Glide
+    implementation deps.glide.core
+    kapt deps.glide.compiler
 
     //DI
     implementation deps.koin.core

@@ -1,7 +1,7 @@
 ext.deps = [:]
 
 def build_versions = [:]
-build_versions.min_sdk = 16
+build_versions.min_sdk = 14
 build_versions.target_sdk = 29
 ext.build_versions = build_versions
 
@@ -117,6 +117,7 @@ ext.deps = deps
 def addRepos(RepositoryHandler handler) {
     handler.google()
     handler.jcenter()
+    handler.mavenCentral()
 }
 
 ext.addRepos = this.&addRepos
