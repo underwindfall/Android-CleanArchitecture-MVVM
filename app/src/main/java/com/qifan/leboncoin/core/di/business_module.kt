@@ -1,13 +1,16 @@
 package com.qifan.leboncoin.core.di
 
 import com.qifan.leboncoin.data.local.LeBonCoinLocalDataSource
-import com.qifan.leboncoin.data.mapper.list.LeBonCoinEntityMapper
+import com.qifan.leboncoin.data.local.db.LeBonCoinRoomDataBase
+import com.qifan.leboncoin.data.mapper.list.LeBonCoinLocalEntityMapper
+import com.qifan.leboncoin.data.mapper.list.LeBonCoinRemoteEntityMapper
 import com.qifan.leboncoin.data.remote.LeBonCoinRemoteDataSource
 import com.qifan.leboncoin.domain.interactor.GetLeBonCoinDataUseCase
 import com.qifan.leboncoin.domain.repository.GetLeBonCoinRepository
 import com.qifan.leboncoin.domain.source.LeBonCoinDataStore
 import com.qifan.leboncoin.domain.source.LeBonCoinDataStoreFactory
 import com.qifan.leboncoin.feature.list.mapper.LeBonCoinMapper
+import org.koin.android.ext.koin.androidApplication
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
@@ -25,13 +28,25 @@ val domainModule = module {
 
 val dataModule = module {
     factory {
-        LeBonCoinEntityMapper()
+        LeBonCoinRemoteEntityMapper()
     }
+
+    factory {
+        LeBonCoinLocalEntityMapper()
+    }
+
+    single {
+        LeBonCoinRoomDataBase.getInstance(androidApplication())
+    }
+
+
+    factory { get<LeBonCoinRoomDataBase>().leboncoinLocalDao() }
+
     factory<LeBonCoinDataStore>(named("remote")) {
         LeBonCoinRemoteDataSource(get(), get())
     }
     factory<LeBonCoinDataStore>(named("local")) {
-        LeBonCoinLocalDataSource()
+        LeBonCoinLocalDataSource(get(), get())
     }
 }
 

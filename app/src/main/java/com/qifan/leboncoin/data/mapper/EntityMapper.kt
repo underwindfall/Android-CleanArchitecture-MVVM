@@ -4,6 +4,13 @@ package com.qifan.leboncoin.data.mapper
  * Created by Qifan on 2019-07-14.
  */
 
-interface EntityMapper<in M, out E> {
+interface EntityMapper<M, E>
+
+interface EntityRemoteMapper<M, E> : EntityMapper<M, E> {
     fun mapFromRemote(type: M): E
+}
+
+interface EntityLocalMapper<M, E> : EntityMapper<M, E> {
+    fun mapFromLocal(type: M): E
+    fun mapToLocal(type: E): M
 }

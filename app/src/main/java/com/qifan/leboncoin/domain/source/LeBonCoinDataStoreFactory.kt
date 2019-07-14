@@ -8,8 +8,8 @@ class LeBonCoinDataStoreFactory(
     private val remoteDataStore: LeBonCoinDataStore
 ) {
 
-    fun getDataStore(): LeBonCoinDataStore {
-        return remoteDataStore
+    fun getDataStore(isCached: Boolean): LeBonCoinDataStore {
+        return if (isCached) localDataStore else remoteDataStore
     }
 
     fun getLocalDataStore(): LeBonCoinDataStore = localDataStore
