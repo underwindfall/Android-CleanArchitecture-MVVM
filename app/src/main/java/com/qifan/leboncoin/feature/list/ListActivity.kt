@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.jakewharton.rxbinding3.view.clicks
 import com.qifan.leboncoin.R
 import com.qifan.leboncoin.core.NetWorkState
 import com.qifan.leboncoin.core.base.BaseActivity
@@ -11,8 +12,10 @@ import com.qifan.leboncoin.core.behaviors.BehaviorObservers
 import com.qifan.leboncoin.core.behaviors.builder
 import com.qifan.leboncoin.core.behaviors.reactive.ReactiveBehavior
 import com.qifan.leboncoin.core.behaviors.reactive.reactive
+import com.qifan.leboncoin.core.extension.snack
 import com.qifan.leboncoin.feature.list.adapter.JsonListAdapter
 import com.qifan.leboncoin.feature.list.model.LeBonCoin
+import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_list.*
 import org.koin.android.ext.android.inject
@@ -22,7 +25,6 @@ class ListActivity : BaseActivity(), ReactiveBehavior {
     private lateinit var adapter: JsonListAdapter
     private var dataSourceList: MutableList<LeBonCoin> = mutableListOf()
     override fun getLayoutId(): Int = R.layout.activity_list
-    override fun getMenuId(): Int? = null
 
     override val behaviors: BehaviorObservers by builder {
         use(
@@ -33,7 +35,8 @@ class ListActivity : BaseActivity(), ReactiveBehavior {
     override fun startObserve(compositeDisposable: CompositeDisposable) {
         compositeDisposable.addAll(
             handleNetWorkState().subscribe(),
-            handleDataList().subscribe()
+            handleDataList().subscribe(),
+            handleFabClick().subscribe()
         )
     }
 
@@ -50,6 +53,12 @@ class ListActivity : BaseActivity(), ReactiveBehavior {
         recycler_view.adapter = adapter
     }
 
+    private fun handleFabClick() = fab.clicks()
+        .switchMapCompletable {
+            Completable.fromCallable {
+                viewModel.loadData()
+            }
+        }
 
     private fun handleDataList() = viewModel.dataList
         .doOnNext {
@@ -84,6 +93,9 @@ class ListActivity : BaseActivity(), ReactiveBehavior {
     private fun showFail() {
         loading.visibility = View.GONE
         recycler_view.visibility = View.VISIBLE
+        fab.snack(R.string.network_error) {
+            viewModel.loadData()
+        }
     }
 
 }

@@ -1,7 +1,6 @@
 package com.qifan.leboncoin.core.base
 
 import android.os.Bundle
-import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import com.qifan.leboncoin.core.behaviors.BehaviorConsumer
 
@@ -20,15 +19,5 @@ abstract class BaseActivity : AppCompatActivity(), BehaviorConsumer {
         super.onDestroy()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        super.onCreateOptionsMenu(menu)
-        val menuId = getMenuId()
-        return menuId?.let {
-            menuInflater.inflate(menuId, menu)
-            true
-        } ?: false
-    }
-
     abstract fun getLayoutId(): Int
-    abstract fun getMenuId(): Int?
 }

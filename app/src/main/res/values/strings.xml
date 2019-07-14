@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">LeBonCoin</string>
+    <string name="menu_action_filter">Show By Group</string>
+    <string name="network_error">Network Error Exception</string>
 </resources>
