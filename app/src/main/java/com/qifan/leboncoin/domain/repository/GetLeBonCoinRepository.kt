@@ -20,7 +20,7 @@ class GetLeBonCoinRepository(private val factory: LeBonCoinDataStoreFactory) : R
 
     override fun getData(): Flowable<List<LeBonCoinEntity>> {
         return factory.getLocalDataStore().isCached()
-            .flatMapPublisher {
+            .flatMap {
                 factory.getDataStore(it).getData()
             }
             .flatMap {

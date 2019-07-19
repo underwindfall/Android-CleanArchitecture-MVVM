@@ -6,7 +6,6 @@ import com.qifan.leboncoin.domain.entity.LeBonCoinEntity
 import com.qifan.leboncoin.domain.source.LeBonCoinDataStore
 import io.reactivex.Completable
 import io.reactivex.Flowable
-import io.reactivex.Single
 
 /**
  * Created by Qifan on 2019-07-14.
@@ -35,9 +34,9 @@ class LeBonCoinLocalDataSource(
         return Completable.fromCallable { dao.deleteAll() }
     }
 
-    override fun isCached(): Single<Boolean> {
+    override fun isCached(): Flowable<Boolean> {
         return dao.getAll()
-            .isEmpty
-            .map { !it }
+            .map { it.isNotEmpty() }
+            .map { it }
     }
 }
