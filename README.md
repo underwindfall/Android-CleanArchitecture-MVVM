@@ -1,4 +1,4 @@
-# LeBonCoinTech
+# Android-CleanArchitecture-MVVM
 
 This project is using mvvm clean architecure.
 
